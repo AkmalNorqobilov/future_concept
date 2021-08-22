@@ -1,24 +1,24 @@
 export const state = () => ({
-    portfolios: [],
-    portfolio: null,
+    socials: [],
+    social: null,
     status: "",
     message: "",
     error: false
 });
 
 export const mutations = {
-    PORTFOLIO_REQUEST(state) {
+    SOCIAL_REQUEST(state) {
         state.status = "...loading",
             state.message = "";
         state.error = false
     },
-    PORTFOLIOS_SUCCESS(state, portfolios) {
-        state.portfolios = portfolios;
+    SOCIALS_SUCCESS(state, socials) {
+        state.socials = socials;
         state.status = "";
         state.message = "Muvaffaqiyatli yakunlandi!!!"
         state.error = false;
     },
-    PORTFOLIO_FAILURE(state, error) {
+    SOCIAL_FAILURE(state, error) {
         state.status = "";
         state.message = "Muvaffaqiyatsiz yakunlandi!!!"
         state.error = true;
@@ -29,44 +29,46 @@ export const mutations = {
         state.message = "";
     },
 
-    PORTFOLIO_SUCCESS(state, portfolio) {
-        state.portfolio = portfolio;
+    SOCIAL_SUCCESS(state, social) {
+        state.social = social;
         state.status = "";
         state.message = "Muvaffaqiyatli yakunlandi!!!"
         state.error = false;
     },
     CLEAR_ONE_ORDER(state) {
-        state.portfolio = null;
+        state.social = null;
     }
 };
 
 export const actions = {
 
     GET_ONE({ commit }, id) {
-        commit('PORTFOLIO_REQUEST');
+        commit('SOCIAL_REQUEST');
         return new Promise((resolve, reject) => {
-            this.$axios.$get(`/portfolio/one/${id}`)
+            this.$axios.$get(`/social/one/${id}`)
                 .then(res => {
-                    commit('PORTFOLIO_SUCCESS');
+                    commit('SOCIAL_SUCCESS');
                     resolve(true)
                 })
                 .catch(err => {
-                    commit('PORTFOLIO_FAILURE');
+                    commit('SOCIAL_FAILURE');
                     reject(false);
                 })
         })
     },
 
     GET_ALL({ commit }) {
-        commit('PORTFOLIO_REQUEST');
+        commit('SOCIAL_REQUEST');
         return new Promise((resolve, reject) => {
-            this.$axios.$get('/portfolio/all')
+            this.$axios.$get('/social/all')
                 .then(res => {
-                    commit('PORTFOLIOS_SUCCESS', res.data);
+                    console.log(res.data);
+                    commit('SOCIALS_SUCCESS', res.data);
                     resolve(true)
                 })
                 .catch(err => {
-                    commit('PORTFOLIO_FAILURE');
+                    console.log(err, "xato ketdi");
+                    commit('SOCIAL_FAILURE');
                     reject(false);
                 })
         })
@@ -74,48 +76,46 @@ export const actions = {
 
     CREATE_ONE({ commit, dispatch }, data) {
         console.log(data);
-        commit('PORTFOLIO_REQUEST');
+        commit('SOCIAL_REQUEST');
         return new Promise((resolve, reject) => {
-            this.$axios.$post('/portfolio/add', data)
+            this.$axios.$post('/social/add', data)
                 .then(res => {
                     dispatch('GET_ALL');
                     resolve(true)
                 })
                 .catch(err => {
-                    commit('PORTFOLIO_FAILURE');
+                    commit('SOCIAL_FAILURE');
                     reject(false);
                 });
         });
     },
 
     UPDATE_ONE({ commit, dispatch }, data) {
-        commit('PORTFOLIO_REQUEST');
-        console.log(data, "update uchun");
+        commit('SOCIAL_REQUEST');
         return new Promise((resolve, reject) => {
-            this.$axios.$put(`/portfolio/update/${data._id}`, data)
+            this.$axios.$put(`/social/update/${data._id}`, data)
                 .then(res => {
                     dispatch('GET_ALL');
                     resolve(true)
                 })
                 .catch(err => {
                     // console.log(err);
-                    commit('PORTFOLIO_FAILURE');
+                    commit('SOCIAL_FAILURE');
                     reject(false);
                 });
         });
     },
 
     DELETE_ONE({ commit, dispatch }, id) {
-        commit('PORTFOLIO_REQUEST');
-        console.log(id, 'mening idim');
+        commit('SOCIAL_REQUEST');
         return new Promise((resolve, reject) => {
-            this.$axios.$delete(`/portfolio/delete/${id}`)
+            this.$axios.$delete(`/social/delete/${id}`)
                 .then(res => {
-                    dispatch('GET_ALL');
+                    dispatch('GET_ALL', res.data);
                     resolve(true);
                 })
                 .catch(err => {
-                    commit('PORTFOLIO_FAILURE');
+                    commit('SOCIAL_FAILURE');
                     reject(false);
                 });
         });

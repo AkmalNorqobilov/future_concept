@@ -9,7 +9,7 @@
       <v-col>
         <v-card elevation="10">
           <v-card-title>
-            Ijtimoiy tarmoqlar
+            Qilingan Ishlar
             <v-spacer></v-spacer>
             <v-row justify="end">
               <v-col cols="6">
@@ -33,20 +33,16 @@
           </v-card-title>
           <v-data-table
             :headers="headers"
-            :items="$store.state.socials.socials"
+            :items="$store.state.portfolios.portfolios"
             :search="search"
           >
             <template v-slot:item="row">
               <tr>
                 <td class="py-1">
-                  <nuxt-link :to="row.item.link">
-                    <v-img
-                      :src="$store.state.uploads +   row.item.image.path"
-                      contain
-                      height="60"
-                      width="100"
-                    ></v-img>
-                  </nuxt-link>
+                  <v-img contain height="60" width="100" :src="$store.state.uploads + row.item.images[0].path"></v-img>
+                </td>
+                <td>
+                  {{ dateformat(row.item.createdAt) }}
                 </td>
 
                 <td class="text-right">
@@ -95,13 +91,18 @@
 <script>
 import adminLayout from "../../../components/adminLayout.vue";
 import { deleteItem } from "../../../helpers/mixins/delete";
+import DateFormat from "dateformat";
 export default {
   middleware: "isAdmin",
   data: () => ({
     headers: [
       {
-        text: "Rasm",
-        value: "image",
+        text: "Bino nomi",
+        value: "buildingName",
+      },
+      {
+        text: "Saqlangan sanasi",
+        value: "createdAt",
       },
       // {
       //   text: "Link",
@@ -112,14 +113,21 @@ export default {
   }),
   mixins: [deleteItem],
   methods: {
+    dateformat(date) {
+      let changedDate = DateFormat(date, "isoDate");
+      changedDate = changedDate.split("-");
+      changedDate.reverse();
+      changedDate = changedDate.join(".");
+      return changedDate;
+    },
     deleteData() {
-      this.deleteRequest("socials/DELETE_ONE");
+      this.deleteRequest("portfolios/DELETE_ONE");
     },
   },
   components: { adminLayout },
   beforeCreate() {
     this.$store
-      .dispatch("socials/GET_ALL")
+      .dispatch("portfolios/GET_ALL")
       .then(() => {
         console.log("ishlamadi");
       })

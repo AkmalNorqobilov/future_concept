@@ -10,32 +10,19 @@
       <v-form ref="oneItem" v-model="valid" lazy-validation>
         <v-row justify="center" align="center">
           <v-col cols="6">
-            <v-text-field
-              v-model="service.name.uz"
-              :rules="[required('Xizmat nomi(uz)')]"
-              label="Xizmat nomi(uz)"
-            ></v-text-field>
+            <v-file-input
+              @change="setImage($event)"
+              :rules="rules"
+              label="Rasm"
+            ></v-file-input>
+            <!--  :rules="[required('Rasm')]" -->
           </v-col>
           <v-col cols="6">
             <v-text-field
-              v-model="service.name.ru"
-              :rules="[required('Xizmat nomi(ru)')]"
-              label="Xizmat nomi(ru)"
+              v-model="social.link"
+              :rules="[required('Link')]"
+              label="Link"
             ></v-text-field>
-          </v-col>
-          <v-col cols="12">
-            <p class="subtitle-1">Xizmat tavsif(uz)</p>
-            <ckeditor-nuxt
-              v-model="service.description.uz"
-              :config="editorConfig"
-            />
-          </v-col>
-          <v-col cols="12">
-            <p class="subtitle-1">Xizmat tavsif(ru)</p>
-            <ckeditor-nuxt
-              v-model="service.description.ru"
-              :config="editorConfig"
-            />
           </v-col>
         </v-row>
         <v-row>
@@ -69,32 +56,31 @@ import { createItem } from "../../../helpers/mixins/create";
 export default {
   components: { adminLayout },
   data: () => ({
-    valid: false,
-    service: {
-      name: {
-        uz: "",
-        ru: "",
-      },
-      description: {
-        uz: "",
-        ru: "",
-      },
+    social: {
+      image: null,
+      link: "",
     },
-    pathWithAdmin: "",
-    path: "",
+    rules: [
+      (v) => !!v || "File is required",
+      (v) => (v && v.size > 0) || "File is required",
+    ],
   }),
   mixins: [validators, ckeditor, createItem],
   methods: {
+    setImage(e) {
+      console.log(e);
+
+      // alert(this.path, this.pathWithAdmin);
+      const form = new FormData();
+      form.append("image", e);
+      this.$axios.$post("/image/upload", form).then((res) => {
+        this.social.image = res.data._id;
+      }).catch(err=>{
+        console.log("Rasm yuklanmadi");
+      });
+    },
     create() {
-      if (this.service.description.uz.length == 0) {
-        return this.$toast.error("Tavsif(Uz) bo'sh bo'lmasligi kerak!!!");
-      }
-
-      if (this.service.description.ru.length == 0) {
-        return this.$toast.error("Tavsif(Ru) bo'sh bo'lmasligi kerak!!!");
-      }
-
-      this.addData(this.service);
+      this.addData(this.social);
     },
   },
 };

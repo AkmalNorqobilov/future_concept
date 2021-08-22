@@ -12,12 +12,14 @@ export const deleteItem = {
         deleteRequest(vuex_delete_action) {
             this.isDelete = false;
             this.$store.dispatch(vuex_delete_action, this.id)
-                .then((res) => {
-                    this.$store.commit('SUCCESS_TRUE', 'Muvaffaqiyatli yakunlandi!!!');
+               .then((res) => {
+                    this.$toast.success('Muvaffaqiyatli yakunlandi!!!');
+                    // this.$store.commit('SUCCESS_TRUE', 'Muvaffaqiyatli yakunlandi!!!');
                 })
                 .catch((error) => {
                     // this.$store.dispatch('ERROR_TRUE');
-                    this.$store.commit("ERROR_TRUE", "Nimadir xato ketdi!!!");
+                    this.$toast.error('Nimadir xato ketdi!!!');
+                    // this.$store.commit("ERROR_TRUE", "Nimadir xato ketdi!!!");
                 });
             ;
         },

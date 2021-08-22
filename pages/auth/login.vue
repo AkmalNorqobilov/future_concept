@@ -87,10 +87,7 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
-    setPhone(value) {
-      this.user.phone = value;
-      this.$v.user.phone.$touch();
-    },
+   
     async loginUser() {
       //   let phone = this.user.phone.replace(/[^0-9]/g, "");
       if (this.$refs.form.validate())
@@ -99,7 +96,7 @@ export default {
             data: this.user,
           });
         } catch (err) {
-          this.error = true;
+          this.$toast.error('Email yoki parol noto\'g\'ri!!!');
           console.log(err);
         }
     },

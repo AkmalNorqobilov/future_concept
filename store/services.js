@@ -73,6 +73,7 @@ export const actions = {
     },
 
     CREATE_ONE({ commit, dispatch }, data) {
+        console.log(data);
         commit('SERVICE_REQUEST');
         return new Promise((resolve, reject) => {
             this.$axios.$post('/service/add', data)

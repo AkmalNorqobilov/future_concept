@@ -50,6 +50,8 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
     '@nuxtjs/style-resources',
+    "vue-toastification/nuxt"
+
 
   ],
 

@@ -7,7 +7,7 @@
           >Bekor qilish</v-btn
         >
       </v-card-title>
-      <v-form ref="tags" v-model="valid" lazy-validation>
+      <v-form ref="oneItem" v-model="valid" lazy-validation>
         <v-row justify="center" align="center">
           <v-col cols="6">
             <v-text-field
@@ -49,6 +49,7 @@
 
 <script>
 import adminLayout from "../../../components/adminLayout.vue";
+import { createItem } from '../../../helpers/mixins/create';
 import { validators } from "../../../helpers/validators";
 export default {
   components: { adminLayout },
@@ -61,38 +62,12 @@ export default {
       },
     },
     pathWithAdmin: "",
-    path: ""
+    path: "",
   }),
-  mixins: [validators],
+  mixins: [validators, createItem],
   methods: {
     create() {
-      if (this.$refs.tags.validate()) {
-        this.$store
-          .dispatch(`${this.path}/CREATE_ONE`, this.tags)
-          .then((res) => {
-            this.$store.commit("SUCCESS_TRUE");
-            this.$router.push(this.pathWithAdmin);
-          })
-          .catch((error) => {
-            this.$store.commit("ERROR_TRUE");
-          });
-      }
-    },
-    reset() {
-      this.$refs.tags.reset();
-    },
-    resetValidation() {
-      this.$refs.tags.resetValidation();
-    },
-
-    getPathWithAdmin() {
-      let path = this.$route.path.split("/");
-      this.path = path[2];
-      this.pathWithAdmin = `/admin/${path[2]}`;
-    },
-
-    created() {
-      this.getPathWithAdmin();
+      this.addData(this.tags);
     },
   },
 };

@@ -2,7 +2,7 @@ export const state = ()=>({
     error: false,
     success: false,
     message: "",
-    uploads: 'http://localhost:8080'
+    uploads: 'http://localhost:8080/public/uploads/'
 });
 
 

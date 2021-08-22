@@ -117,7 +117,7 @@ export default {
       },
       {
         text: "Qilingingan ishlar",
-        route: "/admin/portfolio",
+        route: "/admin/portfolios",
         icon: "mdi-briefcase",
       },
       {

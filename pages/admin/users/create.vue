@@ -70,11 +70,12 @@ export default {
         this.$store
           .dispatch(`${this.path}/CREATE_ONE`, this.tags)
           .then((res) => {
-            this.$store.commit("SUCCESS_TRUE");
+                                this.$toast.success('Muvaffaqiyatli yakunlandi!!!');
+
             this.$router.push(this.pathWithAdmin);
           })
           .catch((error) => {
-            this.$store.commit("ERROR_TRUE");
+            this.$toast.error('Nimadir xato ketdi!!!');;
           });
       }
     },
