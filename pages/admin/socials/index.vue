@@ -50,7 +50,7 @@
                 </td>
 
                 <td class="text-right">
-                  <v-btn
+                  <!-- <v-btn
                     height="35"
                     width="35"
                     color="blue lighten-2"
@@ -59,7 +59,7 @@
                     small
                     :to="`${getUri()}/${row.item._id}`"
                     ><v-icon size="20" color="white">mdi-eye</v-icon></v-btn
-                  >
+                  > -->
                   <v-btn
                     height="35"
                     width="35"

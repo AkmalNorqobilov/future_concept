@@ -83,8 +83,6 @@
     </v-navigation-drawer>
     <v-main>
       <div>
-        <v-alert v-if="$store.state.success" @click="$store.commit('SUCCESS_FALSE')" color="success white--text"  class="text-h6 font-weight-bold alert-position" dismissible border="left" >Muvaffaqiyatli yakunlandi!!!</v-alert>
-                <v-alert v-if="$store.state.error" @click="$store.commit('ERROR_FALSE')" color="error white--text"  class="text-h6 font-weight-bold alert-position" dismissible border="left" >Nimadir xato ketdi!!!</v-alert>
         <v-breadcrumbs class="ma-0" :items="breadcrumbs">
           <template v-slot:item="{ item }">
             <v-breadcrumbs-item :to="item.route" :disabled="item.disabled">

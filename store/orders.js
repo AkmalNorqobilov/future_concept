@@ -45,7 +45,7 @@ export const actions = {
     GET_ONE({ commit }, id) {
         commit('ORDER_REQUEST');
         return new Promise((resolve, reject) => {
-            this.$axios.$get(`/order/${id}`)
+            this.$axios.$get(`/order/one/${id}`)
                 .then(res => {
                     commit('ORDER_SUCCESS');
                     resolve(true)
@@ -62,7 +62,7 @@ export const actions = {
         return new Promise((resolve, reject) => {
             this.$axios.$get('/order/all')
                 .then(res => {
-                    commit('ORDERS_SUCCESS');
+                    commit('ORDERS_SUCCESS', res.data);
                     resolve(true)
                 })
                 .catch(err => {
@@ -73,9 +73,10 @@ export const actions = {
     },
 
     CREATE_ONE({ commit, dispatch }, data) {
+        console.log(data);
         commit('ORDER_REQUEST');
         return new Promise((resolve, reject) => {
-            this.$axios.$post('/order', data)
+            this.$axios.$post('/order/add', data)
                 .then(res => {
                     dispatch('GET_ALL');
                     resolve(true)
@@ -89,32 +90,35 @@ export const actions = {
 
     UPDATE_ONE({ commit, dispatch }, data) {
         commit('ORDER_REQUEST');
+        console.log(data, "update uchun");
         return new Promise((resolve, reject) => {
-            this.$axios.$put(`/order/${data._id}`, data)
+            this.$axios.$put(`/order/update/${data._id}`, data)
                 .then(res => {
                     dispatch('GET_ALL');
                     resolve(true)
                 })
                 .catch(err => {
+                    // console.log(err);
                     commit('ORDER_FAILURE');
                     reject(false);
                 });
         });
     },
 
-    DELETE_ONE({ commit }, id) {
-        commit('ORDER_REQUEST');
-        return new Promise((resolve, reject) => {
-            this.$axios.$delete(`/order/${data._id}`)
-                .then(res => {
-                    dispatch('GET_ALL');
-                    resolve(true)
-                })
-                .catch(err => {
-                    commit('ORDER_FAILURE');
-                    reject(false);
-                });
-        });
-    }
+    // DELETE_ONE({ commit, dispatch }, id) {
+    //     commit('ORDER_REQUEST');
+    //     console.log(id, 'mening idim');
+    //     return new Promise((resolve, reject) => {
+    //         this.$axios.$delete(`/order/delete/${id}`)
+    //             .then(res => {
+    //                 dispatch('GET_ALL');
+    //                 resolve(true);
+    //             })
+    //             .catch(err => {
+    //                 commit('ORDER_FAILURE');
+    //                 reject(false);
+    //             });
+    //     });
+    // }
 
 }
