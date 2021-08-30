@@ -2,7 +2,8 @@ export const state = ()=>({
     error: false,
     success: false,
     message: "",
-    uploads: 'http://localhost:8080/public/uploads/'
+    // uploads: 'http://localhost:8080/public/uploads/'
+    uploads: "https://app-172b1746-e62e-429a-ab48-ee2c9e61998d.cleverapps.io/public/uploads"
 });
 
 

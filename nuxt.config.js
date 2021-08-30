@@ -89,7 +89,8 @@ export default {
 
   axios: {
     // baseURL: "http://localhost:2022/api",
-    baseURL: "http://localhost:8080/api/"
+    // baseURL: "http://localhost:8080/api/",
+    baseURL: "https://app-172b1746-e62e-429a-ab48-ee2c9e61998d.cleverapps.io/api/"
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
