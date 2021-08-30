@@ -2,13 +2,14 @@
   <v-card 
       height="60"
       width="150"
+      v-if="path"
       class="d-inline-block mx-1">
     <v-img
       :src="$store.state.uploads + path"
       contain
     >
     </v-img>
-      <v-btn @click="$emit('deleteImage')" fab x-small absolute class="imageRemoverButton"><v-icon>mdi-close</v-icon></v-btn>
+      <v-btn v-if="deleteButton" @click="$emit('deleteImage')" fab x-small absolute class="imageRemoverButton"><v-icon>mdi-close</v-icon></v-btn>
   </v-card>
 </template>
 
@@ -16,6 +17,10 @@
 export default {
   props: {
     path: String,
+    deleteButton:{
+      type: Boolean,
+      default: true
+    }
   },
 };
 </script>

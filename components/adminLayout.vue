@@ -19,7 +19,7 @@
             <v-list-item>
               <v-list-item-avatar>
                 <img
-                  :src="`http://localhost:8080` + $auth.user.photo"
+                  :src="`${$store.state.uploads}` + $auth.user.photo.path"
                   alt="John"
                 />
               </v-list-item-avatar>

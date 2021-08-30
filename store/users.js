@@ -75,7 +75,7 @@ export const actions = {
     CREATE_ONE({ commit, dispatch }, data) {
         commit('USER_REQUEST');
         return new Promise((resolve, reject) => {
-            this.$axios.$post('/user/add', data)
+            this.$axios.$post('/user/signup', data)
                 .then(res => {
                     dispatch('GET_ALL');
                     resolve(true)

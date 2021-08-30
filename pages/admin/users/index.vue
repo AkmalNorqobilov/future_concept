@@ -37,10 +37,16 @@
             :search="search"
           >
             <template v-slot:item="row">
-              <tr>
-                <td>{{ row.item.name.uz }}</td>
+              <tr >
+                <td class="py-2">
+                  
+                  <v-img width="100" height="80" contain :src="$store.state.uploads + row.item.photo.path"></v-img>
+                </td>
+                <td>{{ row.item.firstname + " " + row.item.lastname }}</td>
+                <td>{{ row.item.email }}</td>
+                <td>{{ row.item.role }}</td>
                 <td class="text-right">
-                  <v-btn
+                  <!-- <v-btn
                     height="35"
                     width="35"
                     color="blue lighten-2"
@@ -49,7 +55,7 @@
                     small
                     :to="`${getUri()}/${row.item._id}`"
                     ><v-icon size="20" color="white">mdi-eye</v-icon></v-btn
-                  >
+                  > -->
                   <v-btn
                     height="35"
                     width="35"
@@ -90,20 +96,21 @@ export default {
   data:()=> ({
       headers: [
         {
-          text: "Rasmi",
-          value: "photo",
+          text: "Rasm",
+          sortable: false,
+          value: "",
         },
         {
           text: "FIO",
-          value: "lastname",
+          value: 'lastname'
         },
         {
           text: "Email",
-          value: "email",
+          value: "email"
         },
         {
-          text: "Turi",
-          value: "role",
+          text: "Foydalanuvchi turi",
+          value: "role"
         },
         { text: "", align: "right", sortable: false, value: "" },
       ],

@@ -3,25 +3,54 @@
     <v-card class="pa-5">
       <v-card-title>
         <v-spacer></v-spacer>
-        <v-btn outlined color="red lighten-2" to="/admin/tags"
+        <v-btn outlined color="red lighten-2" to="/admin/services"
           >Bekor qilish</v-btn
         >
       </v-card-title>
-      <v-form ref="tags" v-model="valid" lazy-validation>
+      <v-form ref="oneItem" v-model="valid" lazy-validation>
         <v-row justify="center" align="center">
-          <v-col cols="6">
+          <v-col cols="4">
+            <v-file-input
+              @change="setImage($event)"
+              :rules="rules"
+              label="Rasm"
+            ></v-file-input>
+            <!--  :rules="[required('Rasm')]" -->
+          </v-col>
+          <v-col cols="4">
             <v-text-field
-              v-model="tags.name.uz"
-              :rules="[required('Teg')]"
-              label="Teg nomi(uz)"
+              v-model="user.firstname"
+              :rules="[required('Ism')]"
+              label="Ism"
             ></v-text-field>
           </v-col>
-          <v-col cols="6">
+
+          <v-col cols="4">
             <v-text-field
-              v-model="tags.name.ru"
-              :rules="[required('Teg')]"
-              label="Teg nomi(ru)"
+              v-model="user.lastname"
+              :rules="[required('Familiya')]"
+              label="Familiya"
             ></v-text-field>
+          </v-col>
+
+          <v-col cols="4">
+            <v-text-field
+              v-model="user.email"
+              :rules="[emailRules]"
+              label="Email"
+            ></v-text-field>
+          </v-col>
+
+          <v-col cols="4">
+            <v-text-field
+              v-model="user.password"
+              :rules="[required('Parol'), minLength('Parol', 8)]"
+              counter
+              label="Parol"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="4">
+            <v-select :items="['admin', 'user', 'moderator']" label="Foydalanuvchi turi" v-model="user.role"></v-select>
           </v-col>
         </v-row>
         <v-row>
@@ -50,50 +79,45 @@
 <script>
 import adminLayout from "../../../components/adminLayout.vue";
 import { validators } from "../../../helpers/validators";
+import { createItem } from "../../../helpers/mixins/create";
 export default {
   components: { adminLayout },
   data: () => ({
-    valid: false,
-    tags: {
-      name: {
-        uz: "",
-        ru: "",
-      },
+    user: {
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: "",
+      photo: "",
+      role: "",
     },
-    pathWithAdmin: "",
-    path: ""
+    rules: [
+      (v) => !!v || "File is required",
+      (v) => (v && v.size > 0) || "File is required",
+    ],
   }),
-  mixins: [validators],
+  mixins: [validators,  createItem],
   methods: {
-    create() {
-      if (this.$refs.tags.validate()) {
-        this.$store
-          .dispatch(`${this.path}/CREATE_ONE`, this.tags)
-          .then((res) => {
-                                this.$toast.success('Muvaffaqiyatli yakunlandi!!!');
-
-            this.$router.push(this.pathWithAdmin);
-          })
-          .catch((error) => {
-            this.$toast.error('Nimadir xato ketdi!!!');;
-          });
+    setImage(e) {
+      console.log(e);
+      if (this.user.photo) {
+        this.$axios.$delete(`/${this.user.photo._id}`);
       }
+      // alert(this.path, this.pathWithAdmin);
+      const form = new FormData();
+      form.append("image", e);
+      this.$axios
+        .$post("/image/upload", form)
+        .then((res) => {
+          this.$toast.success("Rasm muvaffaqiyatli yuklandi!!!");
+          this.user.photo = res.data._id;
+        })
+        .catch((err) => {
+          console.log("Rasm yuklanmadi");
+        });
     },
-    reset() {
-      this.$refs.tags.reset();
-    },
-    resetValidation() {
-      this.$refs.tags.resetValidation();
-    },
-
-    getPathWithAdmin() {
-      let path = this.$route.path.split("/");
-      this.path = path[2];
-      this.pathWithAdmin = `/admin/${path[2]}`;
-    },
-
-    created() {
-      this.getPathWithAdmin();
+    create() {
+      this.addData(this.user);
     },
   },
 };

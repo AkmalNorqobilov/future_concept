@@ -15,20 +15,38 @@
         lazy-validation
       >
         <v-row justify="center" align="center">
-          <v-col cols="4">
-            <v-file-input
-              @change="setImage($event)"
-              :rules="rules"
-              multiple
-              accept="image/*"
-              label="Rasmlar"
-            ></v-file-input>
+          <v-col cols="12">
             <image-remover
               v-for="(image, index) in oneItem.images"
               :key="image._id"
               :path="image.path"
               @deleteImage="deleteImage(image, index)"
             />
+
+            <image-remover
+              v-for="(image, index) in imagesPath"
+              :key="image._id"
+              :path="image.path"
+              @deleteImage="deleteImage(image, index)"
+            />
+          </v-col>
+          <v-col cols="4">
+            <v-file-input
+              v-if="oneItem.images.length==0"
+              @change="setImage($event)"
+              :rules="rules"
+              multiple
+              accept="image/*"
+              label="Rasmlar"
+            ></v-file-input>
+            <v-file-input
+              v-else
+              @change="setImage($event)"
+              multiple
+              accept="image/*"
+              label="Rasmlar"
+            ></v-file-input>
+            
           </v-col>
           <v-col cols="4">
             <v-autocomplete
@@ -86,7 +104,6 @@
             <ckeditor-nuxt
               v-model="oneItem.building.ru"
               :config="editorConfig"
-              
             />
           </v-col>
         </v-row>
@@ -124,11 +141,12 @@ export default {
   data: () => ({
     isUpdating: false,
     autoUpdate: true,
+    imagesPath: [],
     rules: [
       // (v) => !!v || console.log(v),
       (v) => {
         console.log(v, "vuetifyjs");
-        return !!v || "Rasm bo'sh bo'lmasligi kerak!!!"
+        return !!v || "Rasm bo'sh bo'lmasligi kerak!!!";
       },
     ],
   }),
@@ -138,17 +156,31 @@ export default {
   },
   mixins: [validators, updateItem, ckeditor],
   methods: {
-    deleteImage(img, index){
-      this.$axios.$delete(`image/${img._id}`)
-      .then((res)=>{
-        console.log(res);
-        this.oneItem.images.splice(index, 1);
-        this.$toast.success("Muvaffaqiyatli bajarildi!!!");
-      })
-      .catch((err)=>{
-        console.log(err);
-        this.$toast.error('Rasm o\'chirishda xatolik sodir bo\'ldi!!!')
-      })
+    deleteImage(img, index) {
+      this.$axios
+        .$delete(`image/${img._id}`)
+        .then((res) => {
+          console.log(res);
+          this.oneItem.images.splice(index, 1);
+          this.$toast.success("Muvaffaqiyatli bajarildi!!!");
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$toast.error("Rasm o'chirishda xatolik sodir bo'ldi!!!");
+        });
+    },
+    deleteImage1(img, index) {
+      this.$axios
+        .$delete(`image/${img._id}`)
+        .then((res) => {
+          console.log(res);
+          this.imagesPath.splice(index, 1);
+          this.$toast.success("Muvaffaqiyatli bajarildi!!!");
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$toast.error("Rasm o'chirishda xatolik sodir bo'ldi!!!");
+        });
     },
     setImage(images) {
       // console.log(e);
@@ -161,6 +193,7 @@ export default {
           .$post("/image/upload", form)
           .then((res) => {
             this.oneItem.images = [...this.oneItem.images, res.data._id];
+            this.imagesPath= [...this.imagesPath, res.data];
             this.$toast.success("Rasm muvaffaqiyatli yuklandi");
           })
           .catch((err) => {
