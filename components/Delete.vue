@@ -15,7 +15,7 @@
             </v-col>
             <v-col cols="6">
               <v-btn width="150" class="red ml-5 white--text" @click="$emit('deleteRequest')"
-                >Ўчириш</v-btn
+                >O'chirish</v-btn
               >
             </v-col>
           </v-row>
